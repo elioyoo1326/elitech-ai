@@ -1,19 +1,38 @@
-from agents.discovery_agent import DiscoveryAgent
+from database.database import ProductDatabase
+from models.product import Product
 
 
-def main() -> None:
-    print("=" * 40)
-    print("Elitech AI Product Finder")
-    print("=" * 40)
+def main():
+    database = ProductDatabase()
 
-    keyword = input("Enter a product to search for: ").strip()
+    product = Product(
+        name="Portable Charger",
+        price=24.99,
+        currency="USD",
+        image_url="https://example.com/charger.jpg",
+        product_url="https://example.com/charger",
+        source="test",
+        rating=4.7,
+        review_count=250,
+        seller="Test Seller",
+        category="Electronics",
+    )
 
-    if not keyword:
-        print("You must enter a product.")
-        return
+    product_id = database.save_product(product)
 
-    agent = DiscoveryAgent()
-    agent.search(keyword)
+    print(f"\nProduct saved with database ID: {product_id}")
+
+    products = database.get_all_products()
+
+    print("\nSaved products:")
+
+    for saved_product in products:
+        print(
+            f"{saved_product['id']}: "
+            f"{saved_product['name']} - "
+            f"{saved_product['currency']} "
+            f"{saved_product['price']}"
+        )
 
 
 if __name__ == "__main__":
